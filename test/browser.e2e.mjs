@@ -121,6 +121,10 @@ try {
   await app.eval(`document.querySelector('#welcome-name').value = '<img src=x onerror="window.__pwned=1">Ravi'`);
   await app.eval(`document.querySelector('#welcome-start').click()`);
   check('guest sign-in opens the main app', await app.until(`!document.querySelector('#main').classList.contains('hidden')`));
+  check('a sign-out button is in the top bar', await app.eval(`document.querySelector('#sign-out-top')?.getAttribute('aria-label') === 'Sign out' && document.querySelector('#sign-out-top').offsetParent !== null`));
+  // Cancelling the "are you sure?" keeps the person signed in.
+  await app.eval(`window.confirm = () => false; document.querySelector('#sign-out-top').click()`);
+  check('cancelling sign-out keeps you in the app', await app.eval(`!document.querySelector('#main').classList.contains('hidden') && !!localStorage.getItem('km.token')`));
   check('home shows the facility tiles, least crowded ghat and Ask Mitra', await app.until(`document.querySelectorAll('#quick-actions .tile').length === 6`));
   check('the language menu opens and lists three languages', await app.eval(`(document.querySelector('.lang-btn').click(), !document.querySelector('.lang-menu').hidden && document.querySelectorAll('.lang-menu [data-lang]').length === 3)`));
   await app.eval(`document.querySelector('.lang-btn').click()`);

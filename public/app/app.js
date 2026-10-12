@@ -451,6 +451,14 @@ function renderChrome() {
     : 'Demo: pretend this tab has no signal');
   airplane.onclick = () => { setSimulatedOffline(!isSimulatedOffline()); renderChrome(); renderNetwork(); };
 
+  // Sign out from any screen (it used to be only at the bottom of the Family tab).
+  const out = $('#sign-out-top');
+  const outLabel = tr({ en: 'Sign out', hi: 'साइन आउट', mr: 'साइन आउट' });
+  out.innerHTML = icon('logout', { size: 18 });
+  out.setAttribute('aria-label', outLabel);
+  out.title = outLabel;
+  out.onclick = signOut;
+
   $('#sos-label').innerHTML = `<span class="sign-primary">${t('sos')}</span><span class="sign-secondary">${lang() === 'en' ? t('sos', 'hi') : t('sos', 'en')}</span>`;
   $('#sos-button').onclick = openSosSheet;
   $('#topbar-title').textContent = t('appName');

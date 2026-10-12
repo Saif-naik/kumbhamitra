@@ -18,7 +18,7 @@
  * sync replaying a POST the app has already retried is how you get duplicates.
  */
 
-const VERSION = 'km-v15';
+const VERSION = 'km-v16';
 const TILES = 'km-tiles-v1';
 const TILE_LIMIT = 800;
 const TILE_HOSTS = ['tile.openstreetmap.org', 'server.arcgisonline.com'];

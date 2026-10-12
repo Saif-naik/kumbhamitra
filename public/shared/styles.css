@@ -1642,3 +1642,5 @@ body.admin-view #where { display: none; }
 .board-meta { margin: 4px 0 0; font-size: 13.5px; color: var(--ash); }
 .board-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
 .board-actions .btn svg { vertical-align: -3px; }
+/* Pilgrim app: sign out from the top bar. */
+.topbar-out { padding: 6px 9px; }
