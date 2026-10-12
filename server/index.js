@@ -7,7 +7,7 @@ import { seedIfEmpty } from './db/seed.js';
 import { flush, all } from './db/store.js';
 import { attachRealtime, connectionCount } from './realtime.js';
 import { authenticate, ensureTokens } from './lib/auth.js';
-import { ensureSecrets } from './lib/secrets.js';
+import { ensureSecrets, normalizeKey } from './lib/secrets.js';
 import { sosLimiter } from './lib/rate-limit.js';
 
 import authRoutes from './routes/auth.js';
@@ -86,6 +86,9 @@ app.get('/api/health', (_req, res) =>
     uptimeSeconds: Math.round(process.uptime()),
     liveConnections: connectionCount(),
     openAlerts: all('alerts').filter((a) => a.status === 'open').length,
+    // Where the security key comes from — never the key. 'generated' on a host
+    // means KM_ADMIN_KEY was left empty and nobody knows the key.
+    securityKey: process.env.KM_ADMIN_KEY ? { source: 'KM_ADMIN_KEY', length: normalizeKey(process.env.KM_ADMIN_KEY).length } : { source: 'generated' },
   })
 );
 
