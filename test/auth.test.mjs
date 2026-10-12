@@ -253,3 +253,16 @@ test('guessing the security key locks the admin sign-up', async () => {
   assert.equal(last.status, 429);
   assert.equal((await api('POST', '/api/auth/admin/check-key', { body: { securityKey: KEY } })).status, 429);
 });
+
+test('the key works however a phone types it: lowercase, spaces, long dashes', async () => {
+  // KEY is KM-AUTH-TEST-KEY1.
+  const typed = ['km-auth-test-key1', ' KM-AUTH-TEST-KEY1 ', 'KM–AUTH—TEST‑KEY1', 'km auth-test-key1'.replace(' ', '-'), '"KM-AUTH-TEST-KEY1"'];
+  for (const securityKey of typed) {
+    assert.equal((await api('POST', '/api/auth/key-login', { body: { role: 'pilgrim', securityKey } })).status, 201, securityKey);
+  }
+  assert.equal((await api('POST', '/api/auth/key-login', { body: { role: 'volunteer', securityKey: 'km-auth-test-key1', deviceId: 'phone-typed' } })).status, 200);
+  assert.equal((await login({ role: 'admin', username: 'admin', password: ADMIN, securityKey: ' km–auth-test-key1' })).status, 200);
+  // The letters and numbers still have to be right.
+  assert.equal((await api('POST', '/api/auth/key-login', { body: { role: 'pilgrim', securityKey: 'KM-AUTH-TEST-KEY2' } })).status, 401);
+  assert.equal((await api('POST', '/api/auth/key-login', { body: { role: 'pilgrim', securityKey: 'KMAUTHTESTKEY1' } })).status, 401);
+});

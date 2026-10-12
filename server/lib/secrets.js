@@ -51,15 +51,31 @@ function generatePassword() {
  * The admin security key. Set KM_ADMIN_KEY to choose it; otherwise one is
  * generated at first start, stored only as a hash, and shown once.
  */
+/**
+ * The key as typed on a phone: any case, spaces, quotes, and the long dashes
+ * phone keyboards substitute for "-". Only the letters, digits and dashes
+ * count, so "km–ab12 cd34-ef56" and "KM-AB12-CD34-EF56" are the same key.
+ */
+export function normalizeKey(key) {
+  return String(key ?? '').normalize('NFKC').toUpperCase()
+    .replace(/[‐-―−⁃﹘﹣－]/g, '-')
+    .replace(/[\s"'`​-‍﻿]/g, '');
+}
+
 export async function verifyAdminKey(key) {
-  if (!key) return false;
-  const fromEnv = process.env.KM_ADMIN_KEY;
+  const typed = normalizeKey(key);
+  if (!typed) return false;
+  const fromEnv = normalizeKey(process.env.KM_ADMIN_KEY);
   if (fromEnv) {
-    const a = crypto.createHash('sha256').update(String(key).trim()).digest();
+    const a = crypto.createHash('sha256').update(typed).digest();
     const b = crypto.createHash('sha256').update(fromEnv).digest();
     return crypto.timingSafeEqual(a, b);
   }
-  return verifySecret(String(key).trim(), raw().secrets?.adminKeyHash);
+  // A generated key is always stored in its canonical form (KM-XXXX-XXXX-XXXX),
+  // so the normalised attempt is what to check; the raw one covers keys stored
+  // by older versions.
+  return (await verifySecret(typed, raw().secrets?.adminKeyHash))
+    || verifySecret(String(key).trim(), raw().secrets?.adminKeyHash);
 }
 
 /** Demo volunteer phone numbers, by seeded id. */
@@ -120,6 +136,14 @@ export function ensureSecrets({ quiet = false } = {}) {
   }
 
   flush();
+  // On a host (Render) nobody can open the credentials file, so say in the
+  // owner-only log whether the key came from KM_ADMIN_KEY — never the key itself.
+  const hosted = Boolean(process.env.RENDER);
+  if (hosted) {
+    console.log(process.env.KM_ADMIN_KEY
+      ? `  Security key: from KM_ADMIN_KEY (${normalizeKey(process.env.KM_ADMIN_KEY).length} characters; case, spaces and dash style do not matter)`
+      : '  Security key: KM_ADMIN_KEY is not set — a key was generated and is printed below. Set KM_ADMIN_KEY in Render → Environment to choose your own.');
+  }
   if (!created.length) return;
 
   const file = path.join(path.dirname(dataFile()), 'FIRST-RUN-CREDENTIALS.txt');
@@ -134,7 +158,7 @@ export function ensureSecrets({ quiet = false } = {}) {
     '',
   ].join('\n');
   try { fs.appendFileSync(file, `${text}\n`); } catch { /* still printed below */ }
-  if (!quiet) {
+  if (!quiet || hosted) {
     console.log('');
     console.log('  First start — credentials created (also saved to');
     console.log(`  ${file}):`);
