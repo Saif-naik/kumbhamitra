@@ -154,6 +154,22 @@ app.use((err, _req, res, _next) => {
 const server = http.createServer(app);
 attachRealtime(server);
 
+/**
+ * Stay awake on a free host. Render's free plan stops a service after 15
+ * minutes with no visitors, and the first visitor after that waits ~30 s —
+ * far too slow for someone pressing the help button. Visiting our own public
+ * address every 10 minutes counts as a visitor, so it never goes to sleep.
+ * (Render sets RENDER_EXTERNAL_URL itself; KM_KEEP_AWAKE=0 turns this off.)
+ */
+const PUBLIC_URL = process.env.KM_PUBLIC_URL || process.env.RENDER_EXTERNAL_URL;
+if (PUBLIC_URL && process.env.KM_KEEP_AWAKE !== '0') {
+  const ping = () => fetch(`${PUBLIC_URL.replace(/\/$/, '')}/api/health`, { headers: { 'user-agent': 'kumbhamitra-keep-awake' } })
+    .catch(() => { /* the next one will try again */ });
+  setInterval(ping, 10 * 60_000).unref();
+  setTimeout(ping, 60_000).unref();
+  console.log(`  Keep-awake: visiting ${PUBLIC_URL} every 10 minutes so the free plan never sleeps.`);
+}
+
 server.listen(PORT, () => {
   if (QUIET) return;
   console.log('');
