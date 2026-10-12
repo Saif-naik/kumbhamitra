@@ -1,0 +1,29 @@
+# Render blueprint: render.com → New → Blueprint → pick this repository.
+# Render asks for the three secrets marked `sync: false` when you create it.
+services:
+  - type: web
+    name: kumbhamitra
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: KM_QUIET
+        value: "1"
+      # Your control-room security key, e.g. KM-ABCD-1234-WXYZ.
+      - key: KM_ADMIN_KEY
+        sync: false
+      # Password for the built-in "admin" login (any username works with the key too).
+      - key: KM_ADMIN_PASSWORD
+        sync: false
+      # Password for the eight demo volunteers (phones 9000000001 … 9000000008).
+      - key: KM_DEMO_PASSWORD
+        sync: false
+      # Filled in after the Android app is built (its signing fingerprint).
+      - key: KM_ANDROID_SHA256
+        sync: false

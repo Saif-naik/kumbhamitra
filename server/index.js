@@ -37,6 +37,10 @@ ensureSecrets({ quiet: QUIET });
 
 const app = express();
 app.disable('x-powered-by');
+// Behind a host's proxy (Render, Railway…) the visitor's address is in
+// X-Forwarded-For; without this every phone would share the proxy's address
+// and one rate limit.
+if (process.env.RENDER || process.env.KM_TRUST_PROXY) app.set('trust proxy', 1);
 app.use(express.json({ limit: '64kb' }));
 
 /**
@@ -100,6 +104,16 @@ app.use((req, res, next) => {
     return res.status(404).json({ error: 'not_found', path: req.path });
   }
   next();
+});
+
+// The Android app (a Trusted Web Activity) opens full-screen only when this
+// site vouches for it: the app's package name and signing-key fingerprint.
+app.get('/.well-known/assetlinks.json', (_req, res) => {
+  const fingerprints = String(process.env.KM_ANDROID_SHA256 ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+  res.json(fingerprints.length ? [{
+    relation: ['delegate_permission/common.handle_all_urls'],
+    target: { namespace: 'android_app', package_name: process.env.KM_ANDROID_PACKAGE || 'com.kumbhamitra.app', sha256_cert_fingerprints: fingerprints },
+  }] : []);
 });
 
 // Leaflet is served from our own origin, never a CDN: the map code has to load
