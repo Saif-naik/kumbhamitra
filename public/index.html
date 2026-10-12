@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0F3B44">
+<meta name="description" content="Kumbh-a-Mitra prototype: pilgrim app, volunteer queue and control room.">
+<title>Kumbh-a-Mitra</title>
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/icon-180.png">
+<script src="/shared/theme-boot.js"></script>
+<link rel="stylesheet" href="/shared/styles.css">
+</head>
+<body class="landing">
+
+<header class="landing-hero">
+  <div class="landing-theme" id="theme-switch"></div>
+  <div class="landing-wrap">
+    <svg class="landing-logo" viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" fill="#0F3B44" stroke="rgba(253,246,233,.6)" stroke-width="2"/>
+      <path d="M12 40 q10 -8 20 0 q10 8 20 0" fill="none" stroke="#8FBFC4" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M32 14 l4.5 9.5 10.5 1.5 -7.5 7.3 1.8 10.4 -9.3 -4.9 -9.3 4.9 1.8 -10.4 -7.5 -7.3 10.5 -1.5z" fill="#F2A03C"/>
+    </svg>
+    <h1>कुंभ-अ-मित्र <span>Kumbh-a-Mitra</span></h1>
+    <p class="landing-tag">A companion for the mela that keeps working when the network and the crowd don't —
+      find your way, find your family, and call for help even with no signal.</p>
+    <p class="landing-tag-hi" lang="hi">मेले का साथी — रास्ता, परिवार और मदद, बिना नेटवर्क के भी।</p>
+  </div>
+  <svg class="landing-waves" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 30 Q150 6 300 30 T600 30 T900 30 T1200 30 V60 H0z" fill="rgba(253,246,233,.16)"/>
+    <path d="M0 40 Q150 18 300 40 T600 40 T900 40 T1200 40 V60 H0z" fill="#FDF6E9"/>
+  </svg>
+</header>
+
+<main class="landing-wrap">
+  <h2 class="landing-h2">Who are you? <span lang="hi">· आप कौन हैं?</span></h2>
+  <p class="landing-sub">Each person has their own way in. Pilgrims can start as a guest — no sign-up needed for the help button.</p>
+
+  <div class="role-grid">
+    <a class="role-card role-primary" href="/app/">
+      <span class="role-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2.5h10a1.5 1.5 0 0 1 1.5 1.5v16a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 20V4A1.5 1.5 0 0 1 7 2.5zM11 18.5h2"/></svg></span>
+      <span class="role-title" lang="hi">तीर्थयात्री ऐप</span>
+      <span class="role-en">Pilgrim app</span>
+      <span class="role-desc">Live map and turn-by-turn, family group, Mitra assistant, and the red help button. Start as a guest or log in with your phone and PIN.</span>
+      <span class="role-cta">I am a pilgrim <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a>
+    <a class="role-card" href="/volunteer/login.html">
+      <span class="role-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6zM9.5 12l1.8 1.8 3.4-3.6"/></svg></span>
+      <span class="role-title">Volunteer</span>
+      <span class="role-en" lang="hi">स्वयंसेवक</span>
+      <span class="role-desc">See the tasks the control room gives you, with notifications and a live map that guides you to the person. Register, or go straight in with the security key.</span>
+      <span class="role-cta">I am a volunteer <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a>
+    <a class="role-card role-restricted" href="/admin/login.html">
+      <span class="role-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg>Restricted</span>
+      <span class="role-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg></span>
+      <span class="role-title">Control room</span>
+      <span class="role-en" lang="hi">नियंत्रण कक्ष</span>
+      <span class="role-desc">Crush prediction, close paths on the live map, notices, approve volunteers, and the volunteer queue to assign alerts. Needs the security key.</span>
+      <span class="role-cta">I am an admin <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+
+  <h2 class="landing-h2">What makes it different</h2>
+  <div class="feature-grid">
+    <div class="feature">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18v-2M9.5 18v-5M14 18v-8M18.5 18V7"/></svg></span>
+      <b>Works with no signal</b>
+      <span>Map, routes and Mitra run on the phone. An SOS with no network hops to nearby phones.</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.5h18v7H3zM8 8.5V6.5a4 4 0 0 1 8 0v2M8 15.5v2a4 4 0 0 0 8 0v-2"/></svg></span>
+      <b>Wristbands for people with no phone</b>
+      <span>Children and elders carry a printed code; any volunteer can reach their family.</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM12 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM3 19c0-2.8 1.8-5 4-5M21 19c0-2.8-1.8-5-4-5M7 20c0-3.5 2.2-6 5-6s5 2.5 5 6"/></svg></span>
+      <b>Crush prediction without tracking</b>
+      <span>Head-counts per landmark per minute — no user column, so no one's movements are stored.</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 4.8 20l.7.7L12 17.6l6.5 3.1.7-.7z" fill="currentColor" stroke="none"/></svg></span>
+      <b>Crowd-aware navigation</b>
+      <span>Live GPS, voice in Hindi, Marathi and English, and a new route the moment a path closes.</span>
+    </div>
+  </div>
+
+  <h2 class="landing-h2">Try this first</h2>
+  <ol class="steps-grid">
+    <li><b>An alert travels.</b> Open the pilgrim app, the control room's volunteer queue, and a volunteer's task page (sign in with the security key — see <code>server/db/FIRST-RUN-CREDENTIALS.txt</code>). Press the red button, pick <i>Someone is missing</i>, confirm — it lands in the queue within a second. Claim it, then resolve it.</li>
+    <li><b>The map re-routes.</b> In the app, tap Sangam Ghat and press <b>Start</b>. In the control room, click a path on the way and mark it <b>Closed</b> — the app says "New route".</li>
+    <li><b>No network, no problem.</b> Press the ✈ button in the app and send an SOS: it says <i>waiting to send</i>. Open a second app tab — the alert is carried across.</li>
+    <li><b>Ask Mitra.</b> "toilet kahan hai", then "wahan bheed hai?", "koi aur?", "chalo" — it remembers the place and starts walking.</li>
+  </ol>
+
+  <p class="landing-foot">Working prototype — see the README for what is real and what is a stub.</p>
+</main>
+<script type="module" src="/shared/landing.js"></script>
+</body>
+</html>

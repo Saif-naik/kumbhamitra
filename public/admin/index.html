@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0F3B44">
+<title>Control room — Kumbh-a-Mitra</title>
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<script src="/shared/theme-boot.js"></script>
+<link rel="stylesheet" href="/shared/styles.css">
+<script src="/vendor/leaflet/leaflet.js" defer></script>
+</head>
+<body>
+<header class="topbar topbar-console">
+  <a class="brand-mark" href="/" aria-label="Kumbh-a-Mitra home">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" fill="#0F3B44"/>
+      <path d="M12 40 q10 -8 20 0 q10 8 20 0" fill="none" stroke="#8FBFC4" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M32 14 l4.5 9.5 10.5 1.5 -7.5 7.3 1.8 10.4 -9.3 -4.9 -9.3 4.9 1.8 -10.4 -7.5 -7.3 10.5 -1.5z" fill="#F2A03C"/>
+    </svg>
+    <span class="net-dot" id="net-dot" role="img" aria-label="Connecting"></span>
+  </a>
+  <div class="console-title"><h1>Control room</h1><span>Kumbh-a-Mitra · नियंत्रण कक्ष</span></div>
+  <span class="spacer"></span>
+  <nav class="view-switch" id="view-switch" aria-label="Switch screen">
+    <a href="/admin/" aria-current="page" data-icon="chart" data-size="18">Control room</a>
+    <a href="/admin/queue.html" data-icon="queue" data-size="18">Volunteer queue</a>
+  </nav>
+  <div id="theme-switch"></div>
+  <span class="me-chip" id="me-chip"></span>
+  <button class="btn btn-topbar topbar-icon-btn" id="sign-out">Sign out</button>
+  <span class="console-clock" id="clock"></span>
+</header>
+<div class="sync-strip"><span id="sync-status" role="status">Connecting…</span></div>
+<div id="critical-bar" class="critical-bar hidden" role="alert"></div>
+
+<main class="console">
+  <div class="stat-row" id="stats"></div>
+
+  <div class="console-grid">
+    <div>
+      <div class="panel" id="crush-panel">
+        <h2 class="panel-title" data-icon="crowd">Crush risk</h2>
+        <p style="font-size:15px;color:var(--ash);margin:0 0 10px">
+          Density, how fast it is rising, and how long until movement stops.
+          Computed from head-counts per landmark per minute — never from anyone's
+          identity, so this cannot become a movement history for any individual.
+        </p>
+        <div id="crush-list"></div>
+        <div class="field" style="margin-top:12px;align-items:center;flex-wrap:wrap">
+          <label class="sr-only" for="sim-node">Landmark to simulate</label>
+          <select id="sim-node" class="btn" style="flex:1;min-width:160px"></select>
+          <button class="btn" id="sim-go">Simulate arrivals</button>
+          <button class="btn" id="sim-clear">Clear</button>
+        </div>
+        <p style="font-size:13px;color:var(--ash);margin:8px 0 0">
+          Demo control: injects a synthetic crowd so the prediction can be shown
+          without five hundred real handsets on the ground.
+        </p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title" data-icon="route">Mark a path</h2>
+        <p style="font-size:16px;color:var(--ash)">
+          Click a path on the map, then set how bad it is. Every phone on the ground
+          re-routes within seconds — this is the smallest message the system sends
+          and the most valuable one.
+        </p>
+        <div id="edge-controls" aria-live="polite">
+          <p style="color:var(--ash);margin:0">No path selected.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title" data-icon="megaphone">Send a notice</h2>
+        <p style="font-size:14px;color:var(--ash);margin:0 0 8px">
+          Write in at least one language — empty ones are filled from the others.
+        </p>
+        <div class="field" style="margin:0 0 8px">
+          <input id="notice-hi" maxlength="280" lang="hi" aria-label="Notice in Hindi" placeholder="हिंदी में सूचना">
+        </div>
+        <div class="field" style="margin:0 0 8px">
+          <input id="notice-mr" maxlength="280" lang="mr" aria-label="Notice in Marathi" placeholder="मराठीत सूचना">
+        </div>
+        <div class="field" style="margin:0 0 8px">
+          <input id="notice-en" maxlength="280" aria-label="Notice in English" placeholder="Notice in English">
+        </div>
+        <div class="row" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <label class="sr-only" for="notice-severity">Severity</label>
+          <select id="notice-severity" class="btn" style="flex:1">
+            <option value="info">Information</option>
+            <option value="warning">Warning</option>
+            <option value="urgent">Urgent</option>
+          </select>
+          <span id="notice-count" style="font-size:13px;color:var(--ash);font-variant-numeric:tabular-nums">0/280</span>
+          <button class="btn btn-go" id="notice-send">Send notice</button>
+        </div>
+        <h2 style="font-size:16px;margin-top:16px">Live on phones now</h2>
+        <div id="notice-list"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title" data-icon="bell">Open alerts</h2>
+        <p style="font-size:14px;color:var(--ash);margin:0 0 6px">Most urgent first. Volunteers see their own skill-matched order.</p>
+        <div id="alerts"></div>
+      </div>
+    </div>
+
+    <div class="console-side">
+      <div class="map-toolbar" id="map-toolbar" role="toolbar" aria-label="Map"></div>
+      <div id="map-note" class="gps-status hidden" role="status"></div>
+      <div class="map-frame">
+        <div id="map-live"></div>
+        <div id="map-simple" hidden></div>
+      </div>
+      <p class="map-key">
+        <span><i class="key-dot" style="background:#7A1B12"></i>Circles: crowd pressure (bigger = fuller)</span>
+        <span><i class="key-dot" style="background:var(--tulsi)"></i>Volunteer free</span>
+        <span><i class="key-dot" style="background:var(--ash)"></i>Volunteer on a job</span>
+        <span>Click any path to close or reopen it</span>
+      </p>
+      <div id="legend"></div>
+      <div class="panel" style="margin-top:14px">
+        <h2 class="panel-title" data-icon="flag">Flagged paths</h2>
+        <div id="flag-list"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="/admin/admin.js"></script>
+</body>
+</html>

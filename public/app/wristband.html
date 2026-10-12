@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0F3B44">
+<title>कलाई पट्टी · Wristband</title>
+<script src="/shared/theme-boot.js"></script>
+<link rel="stylesheet" href="/shared/styles.css">
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/icon-180.png">
+<style>
+  .sheet { max-width: 760px; margin: 0 auto; padding: 16px 16px 60px; }
+
+  .band-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .band-steps li { display: flex; gap: 12px; align-items: flex-start; }
+  .band-steps .num {
+    flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--marigold); color: var(--on-marigold); font-weight: 800;
+  }
+  .band-steps b { display: block; }
+  .band-steps span span { font-size: 14px; color: var(--ash); }
+
+  .print-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 14px 0 18px; }
+  .stepper { display: inline-flex; align-items: center; background: var(--card); border: 2px solid var(--line-soft); border-radius: 14px; box-shadow: var(--shadow-1); }
+  .stepper button { width: 52px; height: 52px; border: 0; background: transparent; color: var(--ink); font-size: 26px; font-weight: 700; cursor: pointer; border-radius: 12px; }
+  .stepper button:disabled { opacity: .35; cursor: default; }
+  .stepper input { width: 56px; height: 52px; border: 0; background: transparent; color: var(--ink); text-align: center; font-size: 22px; font-weight: 800; -moz-appearance: textfield; }
+  .stepper input::-webkit-inner-spin-button, .stepper input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .print-btn { min-height: 56px; padding: 10px 22px; font-size: 18px; display: inline-flex; align-items: center; gap: 8px; border-radius: 14px; }
+  .preview-label { font-size: 14px; color: var(--ash); margin: 0 0 8px; }
+
+  /* The band is paper: always white with dark ink, in either theme.
+     Sized for a real wrist: 190 mm long so it wraps an adult and can be cut
+     down for a child, 32 mm tall so it survives being folded and taped. */
+  .band {
+    display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: "qr who tell";
+    align-items: center; gap: 14px;
+    border: 2px dashed #8C8274; border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 14px; background: #fff; color: #0F3B44;
+    width: 190mm; max-width: 100%; min-height: 32mm;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .12);
+  }
+  .band .qr { grid-area: qr; }
+  .band .who { grid-area: who; min-width: 0; }
+  .band .tell { grid-area: tell; max-width: 120px; text-align: center; font-size: 11px; color: #6B6257; line-height: 1.35; }
+  .band .tell b { color: #0F3B44; }
+  .band .code { font-size: 30px; font-weight: 800; letter-spacing: .14em; background: none; padding: 0; text-align: left; color: #0F3B44; }
+  .band .line { font-size: 12px; color: #6B6257; }
+  .band .write { border-bottom: 1px solid #D9C9A9; height: 17px; margin-top: 2px; }
+  .band .brand { font-size: 11px; color: #6B6257; letter-spacing: .04em; }
+
+  /* On a phone the preview stacks; the printout below keeps the real layout. */
+  @media screen and (max-width: 600px) {
+    .band { grid-template-columns: auto 1fr; grid-template-areas: "qr who" "tell tell"; }
+    .band .tell { max-width: none; text-align: left; border-top: 1px dashed #D9C9A9; padding-top: 6px; }
+    .band .code { font-size: 26px; }
+  }
+
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #fff; font-size: 12px; }
+    .sheet { padding: 0; max-width: none; }
+    .band { box-shadow: none; break-inside: avoid; page-break-inside: avoid; margin-bottom: 8mm; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar no-print">
+  <a class="icon-btn icon-btn-on-brand" href="/app/" aria-label="वापस · Back">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </a>
+  <h1>कलाई पट्टी · Wristband</h1>
+  <span class="spacer"></span>
+</header>
+
+<div class="sheet">
+  <div class="no-print">
+    <div class="panel">
+      <h2 class="panel-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5h18v7H3zM8 8.5V6.5a4 4 0 0 1 8 0v2M8 15.5v2a4 4 0 0 0 8 0v-2"/></svg>
+        बच्चों और बुज़ुर्गों के लिए · For anyone with no phone
+      </h2>
+      <ol class="band-steps">
+        <li><span class="num">1</span><span><b>छापें · Print</b><span>A4 paper, as many bands as you need.</span></span></li>
+        <li><span class="num">2</span><span><b>नाम लिखें · Write the name</b><span>Name, age, and any medicine they need.</span></span></li>
+        <li><span class="num">3</span><span><b>कलाई पर बाँधें · Tie it on</b><span>If they get lost, any volunteer scans it and reaches your family — no battery, no signal.</span></span></li>
+      </ol>
+    </div>
+
+    <div class="print-row">
+      <div class="stepper" role="group" aria-label="How many bands / कितनी पट्टियाँ">
+        <button id="count-down" aria-label="Fewer">−</button>
+        <label for="count" class="sr-only">How many bands</label>
+        <input id="count" type="number" min="1" max="10" value="3" inputmode="numeric">
+        <button id="count-up" aria-label="More">+</button>
+      </div>
+      <button class="btn btn-go print-btn" id="print">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"/></svg>
+        छापें · Print
+      </button>
+    </div>
+    <p class="preview-label">पूर्वावलोकन · Preview</p>
+  </div>
+
+  <div id="bands"></div>
+
+  <p class="no-print" style="color:var(--ash);font-size:15px;margin-top:22px">
+    No printer? Write the code on the band with a marker, or on the child's arm.
+    The code is what matters — the QR only saves the volunteer some typing.
+  </p>
+</div>
+
+<script type="module" src="/app/wristband.js"></script>
+</body>
+</html>

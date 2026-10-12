@@ -1,0 +1,6 @@
+node_modules/
+server/db/data.json
+server/db/data.json.tmp
+server/db/*.test.json*
+.env
+server/db/FIRST-RUN-CREDENTIALS.txt

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0F3B44">
+<title>My tasks — Kumbh-a-Mitra volunteer</title>
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<script src="/shared/theme-boot.js"></script>
+<link rel="stylesheet" href="/shared/styles.css">
+<script src="/vendor/leaflet/leaflet.js" defer></script>
+</head>
+<body class="vol-tasks">
+<header class="topbar topbar-console">
+  <a class="brand-mark" href="/" aria-label="Kumbh-a-Mitra home">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" fill="#0F3B44"/>
+      <path d="M12 40 q10 -8 20 0 q10 8 20 0" fill="none" stroke="#8FBFC4" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M32 14 l4.5 9.5 10.5 1.5 -7.5 7.3 1.8 10.4 -9.3 -4.9 -9.3 4.9 1.8 -10.4 -7.5 -7.3 10.5 -1.5z" fill="#F2A03C"/>
+    </svg>
+    <span class="net-dot" id="net-dot" role="img" aria-label="Connecting"></span>
+  </a>
+  <div class="console-title"><h1>My tasks</h1><span>Volunteer · स्वयंसेवक</span></div>
+  <span class="spacer"></span>
+  <div id="theme-switch"></div>
+  <span class="me-chip" id="me-chip"></span>
+  <label class="sr-only" for="where">Where you are now</label>
+  <select id="where" class="btn btn-topbar"></select>
+  <button id="notify" class="btn btn-topbar topbar-icon-btn" aria-pressed="false">Turn on alerts</button>
+  <button id="sound" class="btn btn-topbar" aria-pressed="false">Turn on sound</button>
+  <button id="sign-out" class="btn btn-topbar topbar-icon-btn">Sign out</button>
+</header>
+<div class="sync-strip"><span id="sync-status" role="status">Connecting…</span></div>
+
+<main class="console">
+  <div class="pending-panel" id="pending-panel" hidden role="status"></div>
+
+  <div class="console-grid">
+    <div>
+      <h2 class="section-title panel-title needs-approval" data-icon="bell" style="margin:4px 2px 10px;font-size:20px">Tasks for you <span class="count-pill" id="task-count" hidden></span></h2>
+      <div id="tasks" aria-live="polite"></div>
+      <div id="done"></div>
+
+      <div class="panel chat-panel needs-approval" style="margin-top:16px">
+        <h2 class="panel-title" data-icon="chat">Messages from the control room <span class="count-pill" id="msg-count" hidden></span></h2>
+        <div class="chat-thread" id="chat-thread" aria-live="polite"></div>
+        <div class="chat-compose">
+          <label class="sr-only" for="chat-input">Reply</label>
+          <input id="chat-input" maxlength="500" placeholder="Reply to the control room…" autocomplete="off">
+          <button class="btn btn-go" id="chat-send">Send</button>
+        </div>
+      </div>
+
+      <div class="panel needs-approval" style="margin-top:16px">
+        <h2 class="panel-title" data-icon="flag">Tasks for all volunteers <span class="count-pill" id="board-count" hidden></span></h2>
+        <div id="board-list"></div>
+      </div>
+
+      <div class="panel needs-approval" style="margin-top:16px">
+        <h2 class="panel-title" data-icon="wristband"><label for="band-code">Found someone? Read their band</label></h2>
+        <p style="font-size:15px;color:var(--ash);margin:0 0 10px">
+          A lost child or elder may have a printed wristband. Scan the QR with any
+          camera, or type the six characters — the family is told at once.
+        </p>
+        <div class="field" style="margin:0">
+          <input id="band-code" maxlength="6" autocapitalize="characters" autocomplete="off" spellcheck="false"
+                 placeholder="A C D 2 3 4" class="code-input">
+          <button class="btn btn-go" id="band-go">Look up</button>
+        </div>
+        <div id="band-result" aria-live="polite"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <h2 class="panel-title" data-icon="megaphone">Notices from the control room</h2>
+        <div id="vol-notices"><p style="color:var(--ash);margin:0">No notices right now.</p></div>
+      </div>
+    </div>
+
+    <div class="console-side">
+      <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">
+        <div class="map-toolbar" id="map-toolbar" role="toolbar" aria-label="Map" style="flex:1"></div>
+        <button class="btn btn-sm" id="vol-locate" aria-pressed="false">My location</button>
+      </div>
+      <div id="vol-gps" class="gps-status hidden" role="status"></div>
+      <div id="map-note" class="gps-status hidden" role="status"></div>
+      <div id="vol-guide" class="nav-top vol-guide hidden" role="status" aria-live="polite"></div>
+      <div class="map-frame">
+        <div id="map-live"></div>
+        <div id="map-simple" hidden></div>
+      </div>
+      <div id="legend"></div>
+      <p style="font-size:14px;color:var(--ash);margin:8px 0 0">Press <b>My location</b> for GPS — the map then guides you turn by turn to your task, around closed paths and heavy crowds. Or tap a landmark to say where you are.</p>
+      <div class="panel" id="detail" style="margin-top:14px">
+        <p style="color:var(--ash);margin:0">When the control room gives you a task, the way there appears here.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="/volunteer/volunteer.js"></script>
+</body>
+</html>

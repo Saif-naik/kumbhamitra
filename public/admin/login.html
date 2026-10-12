@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0F3B44">
+<meta name="robots" content="noindex">
+<title>Control room sign in — Kumbh-a-Mitra</title>
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<script src="/shared/theme-boot.js"></script>
+<link rel="stylesheet" href="/shared/styles.css">
+</head>
+<body class="auth-page auth-admin" data-role="admin">
+
+<div class="auth-bg" aria-hidden="true"></div>
+<div class="auth-top">
+  <a class="auth-back" href="/" data-icon="home" data-size="18">Start page</a>
+  <div id="theme-switch"></div>
+</div>
+
+<main class="auth-card">
+  <div class="auth-head">
+    <span class="auth-badge" data-icon="lock" data-size="30"></span>
+    <h1>Control room</h1>
+    <p>Restricted · नियंत्रण कक्ष — admins only</p>
+  </div>
+
+
+  <div id="message" class="auth-message" role="alert" hidden></div>
+
+  <form id="login-form" data-panel="login" class="auth-form">
+    <p class="auth-note" data-icon="lock"><span>Only the <b>security key</b> decides who gets in. Use any username and password you like — the first time, they are saved; after that, use the same ones.</span></p>
+    <label for="login-username">Username <span class="opt">(any name)</span></label>
+    <input id="login-username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+    <label for="login-password">Password <span class="opt">(at least 4 characters)</span></label>
+    <div class="pw-field">
+      <input id="login-password" type="password" autocomplete="current-password" minlength="4" required>
+      <button type="button" class="pw-reveal" data-reveal="login-password" aria-label="Show"></button>
+    </div>
+    <label for="login-key" class="key-label" data-icon="lock" data-size="16">Security key</label>
+    <div class="pw-field">
+      <input id="login-key" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="KM-XXXX-XXXX-XXXX" required>
+      <button type="button" class="pw-reveal" data-reveal="login-key" aria-label="Show"></button>
+    </div>
+    <button class="btn btn-go auth-submit" id="login-go" data-busy="Checking…">Enter control room</button>
+  </form>
+
+    <p class="auth-small">The security key is shown once when the server first starts (saved in
+    <code>server/db/FIRST-RUN-CREDENTIALS.txt</code>), or set with <code>KM_ADMIN_KEY</code>.
+    Wrong keys lock this page for a while.</p>
+</main>
+
+<p class="auth-foot">Volunteer? <a href="/volunteer/login.html">Volunteer sign in</a> · Pilgrim? <a href="/app/">Open the pilgrim app</a></p>
+
+<script type="module" src="/shared/login.js"></script>
+</body>
+</html>

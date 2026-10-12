@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0F3B44">
+<title>Volunteer queue — Control room — Kumbh-a-Mitra</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<script src="/shared/theme-boot.js"></script>
+<link rel="stylesheet" href="/shared/styles.css">
+</head>
+<body>
+<header class="topbar topbar-console">
+  <a class="brand-mark" href="/" aria-label="Kumbh-a-Mitra home">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" fill="#0F3B44"/>
+      <path d="M12 40 q10 -8 20 0 q10 8 20 0" fill="none" stroke="#8FBFC4" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M32 14 l4.5 9.5 10.5 1.5 -7.5 7.3 1.8 10.4 -9.3 -4.9 -9.3 4.9 1.8 -10.4 -7.5 -7.3 10.5 -1.5z" fill="#F2A03C"/>
+    </svg>
+    <span class="net-dot" id="net-dot" role="img" aria-label="Connecting"></span>
+  </a>
+  <div class="console-title"><h1>Volunteer queue</h1><span>Control room · assign alerts to volunteers</span></div>
+  <span class="spacer"></span>
+  <nav class="view-switch" id="view-switch" aria-label="Switch screen">
+    <a href="/admin/" data-icon="chart" data-size="18">Control room</a>
+    <a href="/admin/queue.html" aria-current="page" data-icon="queue" data-size="18">Volunteer queue</a>
+  </nav>
+  <div id="theme-switch"></div>
+  <span class="me-chip" id="me-chip"></span>
+  <label class="sr-only" for="where">Measure walking times from</label>
+  <select id="where" class="btn btn-topbar"></select>
+  <button id="notify" class="btn btn-topbar topbar-icon-btn" aria-pressed="false">Turn on alerts</button>
+  <button id="sound" class="btn btn-topbar" aria-pressed="false">Turn on sound</button>
+  <button id="sign-out" class="btn btn-topbar topbar-icon-btn">Sign out</button>
+</header>
+<div class="sync-strip"><span id="sync-status" role="status">Connecting…</span></div>
+
+<main class="console">
+  <div class="stat-row" id="stats"></div>
+  <div class="console-grid">
+    <div>
+      <div>
+      <h2 class="section-title panel-title" data-icon="bell" style="margin:4px 2px 10px;font-size:20px">Needs someone</h2>
+      <div id="queue" aria-live="polite"></div>
+      <div id="resolved"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <h2 class="panel-title" data-icon="flag">Tasks for all volunteers</h2>
+        <p style="font-size:14px;color:var(--ash);margin:0 0 10px">Jobs every volunteer sees on their page — they tap <b>I'll help</b>.</p>
+        <div class="board-form">
+          <label class="sr-only" for="board-title">Task</label>
+          <input id="board-title" maxlength="120" placeholder="What needs doing? e.g. Two people to Gate 3 at 5 pm">
+          <label class="sr-only" for="board-detail">Details</label>
+          <textarea id="board-detail" maxlength="400" rows="2" placeholder="Details (optional)"></textarea>
+          <div class="board-form-row">
+            <label class="sr-only" for="board-place">Where</label>
+            <select id="board-place" class="assign-select"></select>
+            <label class="sr-only" for="board-needed">People needed</label>
+            <input id="board-needed" type="number" min="1" max="50" value="1" title="People needed" class="board-needed">
+            <button class="btn btn-go" id="board-post">Post to all</button>
+          </div>
+        </div>
+        <div id="board-list" style="margin-top:12px"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <h2 class="panel-title" data-icon="family">On duty now</h2>
+        <div id="roster"></div>
+      </div>
+
+    </div>
+    <div class="console-side">
+      <div class="panel" id="team-panel">
+        <h2 class="panel-title" data-icon="user">Volunteers <span class="count-pill" id="team-count" hidden></span></h2>
+        <p style="font-size:14px;color:var(--ash);margin:0 0 6px">Someone who registers at <a href="/volunteer/login.html">the volunteer sign-in page</a> waits here. They can log in only after you approve them.</p>
+        <div id="team"></div>
+      </div>
+      <div class="panel chat-panel" id="chat-panel" style="margin-top:16px" hidden>
+        <h2 class="panel-title" data-icon="chat"><span id="chat-title">Messages</span></h2>
+        <div class="chat-thread" id="chat-thread" aria-live="polite"></div>
+        <div class="chat-compose">
+          <label class="sr-only" for="chat-input">Message</label>
+          <input id="chat-input" maxlength="500" placeholder="Write a message…" autocomplete="off">
+          <button class="btn btn-go" id="chat-send">Send</button>
+        </div>
+      </div>
+
+      <div class="panel" id="detail" style="margin-top:16px">
+        <p style="color:var(--ash);margin:0">Tap <b>Details</b> on an alert to see who raised it and its history.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="/admin/queue.js"></script>
+</body>
+</html>

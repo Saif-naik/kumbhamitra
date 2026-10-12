@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F3B44">
+<title>कुंभ-अ-मित्र</title>
+<meta name="description" content="Offline-first companion for the mela: find your family, find your way, and call for help even with no signal.">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/icon-180.png">
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<script src="/shared/theme-boot.js"></script>
+<link rel="stylesheet" href="/shared/styles.css">
+<script src="/vendor/leaflet/leaflet.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#sos-button">मदद बटन पर जाएँ · Skip to help button</a>
+<noscript><div class="notice" style="margin:16px">यह ऐप चलाने के लिए JavaScript चालू करें · Turn on JavaScript to use this app.</div></noscript>
+
+<div class="shell">
+
+  <!-- Onboarding. Three taps to a working app: language, name, start. -->
+  <section id="welcome" class="page welcome">
+    <div class="welcome-hero">
+      <div class="landing-theme" id="welcome-theme"></div>
+      <span class="welcome-logo"><svg viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="30" fill="#0F3B44"/>
+          <path d="M12 40 q10 -8 20 0 q10 8 20 0" fill="none" stroke="#8FBFC4" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M32 14 l4.5 9.5 10.5 1.5 -7.5 7.3 1.8 10.4 -9.3 -4.9 -9.3 4.9 1.8 -10.4 -7.5 -7.3 10.5 -1.5z" fill="#F2A03C"/>
+        </svg></span>
+      <h1>कुंभ-अ-मित्र</h1>
+      <p>Kumbh-a-Mitra · मेले का साथी</p>
+      <a class="welcome-staff" href="/">स्वयंसेवक या नियंत्रण कक्ष? · Volunteer or control room?</a>
+      <svg class="welcome-waves" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 22 Q50 6 100 22 T200 22 T300 22 T400 22 V40 H0z" fill="rgba(253,246,233,.18)"/>
+        <path d="M0 28 Q50 14 100 28 T200 28 T300 28 T400 28 V40 H0z" fill="#FDF6E9"/>
+      </svg>
+    </div>
+
+    <div class="welcome-body">
+      <h2 class="welcome-step"><span>1</span>भाषा चुनें · Choose a language</h2>
+      <div id="welcome-langs" class="lang-cards"></div>
+
+      <h2 class="welcome-step"><span>2</span><span id="mode-title">कैसे शुरू करें? · How to start</span></h2>
+      <div class="welcome-modes" id="welcome-modes" role="tablist"></div>
+      <p class="mode-hint" id="mode-hint"></p>
+
+      <div class="welcome-fields">
+        <div id="field-name">
+          <label for="welcome-name" id="label-name">आपका नाम</label>
+          <div class="field name-field"><input id="welcome-name" type="text" autocomplete="name" maxlength="60" placeholder="—"></div>
+        </div>
+        <div id="field-phone" hidden>
+          <label for="welcome-phone" id="label-phone"></label>
+          <div class="field name-field"><input id="welcome-phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="98XXXXXXXX"></div>
+        </div>
+        <div id="field-pin" hidden>
+          <label for="welcome-pin" id="label-pin"></label>
+          <div class="field name-field"><input id="welcome-pin" type="password" inputmode="numeric" maxlength="6" autocomplete="current-password" placeholder="••••"></div>
+        </div>
+        <div id="field-key" hidden>
+          <label for="welcome-key" id="label-key"></label>
+          <div class="field name-field"><input id="welcome-key" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="KM-XXXX-XXXX-XXXX"></div>
+        </div>
+        <div id="field-pin2" hidden>
+          <label for="welcome-pin2" id="label-pin2"></label>
+          <div class="field name-field"><input id="welcome-pin2" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="••••"></div>
+        </div>
+      </div>
+      <div id="welcome-error" class="auth-message" data-tone="error" role="alert" hidden></div>
+
+      <button id="welcome-start" class="act act-primary start-btn">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+        <span class="body" id="welcome-start-label"></span>
+      </button>
+
+      <ul class="welcome-promises">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19.5 7"/></svg>बिना फ़ोन नंबर के भी चलेगा · No phone number needed</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19.5 7"/></svg>नेटवर्क न हो तब भी काम करता है · Works with no network</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19.5 7"/></svg>लाल बटन हमेशा नीचे · The red help button is always at the bottom</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Main app -->
+  <div id="main" class="hidden" style="display:contents">
+
+    <header class="topbar">
+      <span class="brand-mark">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="30" fill="#0F3B44"/>
+          <path d="M12 40 q10 -8 20 0 q10 8 20 0" fill="none" stroke="#8FBFC4" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M32 14 l4.5 9.5 10.5 1.5 -7.5 7.3 1.8 10.4 -9.3 -4.9 -9.3 4.9 1.8 -10.4 -7.5 -7.3 10.5 -1.5z" fill="#F2A03C"/>
+        </svg>
+        <span class="net-dot" id="net-dot" data-state="online" role="img" aria-label="network"></span>
+      </span>
+      <h1 id="topbar-title">कुंभ-अ-मित्र</h1>
+      <span class="spacer"></span>
+      <button id="airplane" class="airplane" title="Demo: simulate no signal in this tab"></button>
+      <div id="theme-switch"></div>
+      <div class="lang-switch" id="lang-switch"></div>
+    </header>
+
+    <div id="mesh-bar" class="mesh-bar hidden" role="status"></div>
+    <div id="reunion-bar" class="hidden"></div>
+
+    <div id="banner" class="net-banner hidden" role="status" aria-live="polite"></div>
+
+    <!-- Turn-by-turn banner. Shown on every tab while walking, so Mitra or the
+         family list can be open without losing the next instruction. -->
+    <div id="nav-top" class="nav-top hidden" role="status" aria-live="polite">
+      <div class="nav-arrow" id="nav-arrow"></div>
+      <div class="nav-text"><b id="nav-dist"></b><span id="nav-instr"></span></div>
+    </div>
+
+    <!-- Home -->
+    <section id="page-home" class="page">
+      <div id="here" class="hero"></div>
+      <div id="install-card"></div>
+      <div id="notices"></div>
+      <h2 class="section-title" id="find-title"></h2>
+      <div id="quick-actions" class="tiles"></div>
+      <div id="next-events" class="panel"></div>
+    </section>
+
+    <!-- Map -->
+    <section id="page-map" class="page" hidden>
+      <div class="map-toolbar" role="toolbar" aria-label="Map / नक्शा">
+        <div class="seg" id="map-mode" role="group"></div>
+        <div class="seg" id="map-layer" role="group"></div>
+        <button class="btn btn-sm" id="locate-me" aria-pressed="false"></button>
+      </div>
+      <div id="gps-status" class="gps-status hidden" role="status" aria-live="polite"></div>
+      <div class="map-frame">
+        <div id="map-live"></div>
+        <div id="map-simple" hidden></div>
+        <button id="recenter" class="map-fab hidden">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 2 4.5 20.3l.7.7L12 18l6.8 3 .7-.7z" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <div id="map-legend"></div>
+      <div id="route-card" class="panel hidden"></div>
+      <div class="panel">
+        <h2><label for="place-select" id="map-place-title">मैं अभी कहाँ हूँ?</label></h2>
+        <p style="font-size:16px;color:var(--ash);margin-bottom:10px">
+          नक्शे पर अपनी जगह छूएँ, या "मेरी जगह" दबाएँ · Touch your place on the map, or press "My location"
+        </p>
+        <div class="field" style="margin:0">
+          <select id="place-select"></select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Group -->
+    <section id="page-group" class="page" hidden>
+      <div id="group-body"></div>
+    </section>
+
+    <!-- Mitra -->
+    <section id="page-mitra" class="page" hidden>
+      <div class="mitra-head">
+        <span class="mitra-avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><circle cx="9" cy="10.5" r="1.2"/><circle cx="15" cy="10.5" r="1.2"/></svg>
+        </span>
+        <span class="mitra-name"><b>मित्र · Mitra</b><span id="mitra-sub"></span></span>
+        <button class="nav-icon-btn" id="mitra-voice" aria-pressed="true"></button>
+        <button class="btn btn-sm btn-quiet" id="mitra-clear"></button>
+      </div>
+      <div class="thread" id="thread" aria-live="polite"></div>
+      <div class="asks" id="quick-asks" role="group" aria-label="Suggestions"></div>
+      <div class="field">
+        <input id="mitra-input" type="text" autocomplete="off" enterkeyhint="send" aria-label="Ask Mitra / मित्र से पूछें" maxlength="300">
+        <button class="btn btn-go" id="mitra-send" aria-label="Send / भेजें">→</button>
+      </div>
+      <button class="act act-quiet mic-btn" id="mitra-mic" style="margin-top:10px">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        <span class="body" id="mic-label"></span>
+      </button>
+    </section>
+
+    <!-- SOS dock, present on every screen -->
+    <div class="sos-dock">
+      <div id="nav-bottom" class="nav-bottom hidden">
+        <div class="nav-summary" id="nav-summary"></div>
+        <button class="nav-icon-btn" id="nav-voice" aria-pressed="true"></button>
+        <button class="btn" id="nav-end"></button>
+      </div>
+      <div id="sos-status" class="hidden"></div>
+      <button class="sos-button" id="sos-button">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M12 3 2.5 20h19L12 3z"/><path d="M12 10v4M12 17.2v.1"/>
+        </svg>
+        <span class="sign" id="sos-label"></span>
+      </button>
+      <nav class="tabs" id="tabs" aria-label="Sections / विभाग"></nav>
+    </div>
+
+  </div>
+</div>
+
+<!-- SOS sheet -->
+<div id="sos-sheet" class="sheet-backdrop hidden">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sos-title">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div id="sos-sheet-body"></div>
+  </div>
+</div>
+
+<!-- Find-me beacon: fills the screen with one colour so a volunteer can spot
+     this phone held up above a crowd of forty thousand people. -->
+<div id="beacon" class="beacon hidden" role="alertdialog" aria-labelledby="beacon-text" aria-describedby="beacon-sub">
+  <div id="beacon-text" style="font-size:26px;font-weight:750;max-width:18ch;line-height:1.3"></div>
+  <div id="beacon-sub" style="font-size:17px;margin-top:10px;max-width:24ch"></div>
+  <button id="beacon-off" class="btn" style="margin-top:26px;background:rgba(255,255,255,.9)">मिल गए · Found me</button>
+</div>
+
+<script type="module" src="/app/app.js"></script>
+</body>
+</html>

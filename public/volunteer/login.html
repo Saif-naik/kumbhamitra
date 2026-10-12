@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0F3B44">
+<title>Volunteer sign in — Kumbh-a-Mitra</title>
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<script src="/shared/theme-boot.js"></script>
+<link rel="stylesheet" href="/shared/styles.css">
+</head>
+<body class="auth-page" data-role="volunteer">
+
+<div class="auth-bg" aria-hidden="true"></div>
+<div class="auth-top">
+  <a class="auth-back" href="/" data-icon="home" data-size="18">Start page</a>
+  <div id="theme-switch"></div>
+</div>
+
+<main class="auth-card">
+  <div class="auth-head">
+    <span class="auth-badge" data-icon="queue" data-size="30"></span>
+    <h1>Volunteer</h1>
+    <p lang="hi">स्वयंसेवक · Sign in to see the tasks given to you</p>
+  </div>
+
+  <div class="auth-tabs" role="tablist">
+    <button role="tab" data-tab="login" aria-selected="true">Log in</button>
+    <button role="tab" data-tab="register" aria-selected="false">Register</button>
+    <button role="tab" data-tab="key" aria-selected="false">Security key</button>
+  </div>
+
+  <div id="message" class="auth-message" role="alert" hidden></div>
+
+  <form id="login-form" data-panel="login" class="auth-form" autocomplete="on">
+    <label for="login-phone">Mobile number</label>
+    <input id="login-phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="10-digit number" required>
+    <label for="login-password">Password</label>
+    <div class="pw-field">
+      <input id="login-password" type="password" autocomplete="current-password" required>
+      <button type="button" class="pw-reveal" data-reveal="login-password" aria-label="Show"></button>
+    </div>
+    <button class="btn btn-go auth-submit" id="login-go" data-busy="Signing in…">Log in</button>
+  </form>
+
+  <form id="key-form" data-panel="key" class="auth-form" hidden autocomplete="on">
+    <p class="auth-note" data-icon="lock"><span>Have the control room's <b>security key</b>? Just enter the key — no name, number, registration or approval.</span></p>
+    <label for="key-code" class="key-label" data-icon="lock" data-size="16">Security key</label>
+    <div class="pw-field">
+      <input id="key-code" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="KM-XXXX-XXXX-XXXX" required>
+      <button type="button" class="pw-reveal" data-reveal="key-code" aria-label="Show"></button>
+    </div>
+    <button class="btn btn-go auth-submit" id="key-go" data-busy="Checking…">Enter with the key</button>
+  </form>
+
+  <form id="register-form" data-panel="register" class="auth-form" hidden autocomplete="on">
+    <p class="auth-note" data-icon="info"><span>After you register, the control room checks and approves you — volunteers see missing children's details. You can log in once you are approved.</span></p>
+    <label for="reg-name">Full name</label>
+    <input id="reg-name" autocomplete="name" maxlength="60" required>
+    <label for="reg-phone">Mobile number</label>
+    <input id="reg-phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="10-digit number" required>
+    <label for="reg-org">Organisation <span class="opt">(optional)</span></label>
+    <input id="reg-org" maxlength="60" placeholder="e.g. NSS unit, Childline, hospital">
+
+    <fieldset class="chips-field">
+      <legend>Training</legend>
+      <label><input type="checkbox" name="skills" value="medical"> Medical</label>
+      <label><input type="checkbox" name="skills" value="first_aid"> First aid</label>
+      <label><input type="checkbox" name="skills" value="child_care"> Child protection</label>
+      <label><input type="checkbox" name="skills" value="women_safety"> Women's safety</label>
+      <label><input type="checkbox" name="skills" value="general" checked> General help</label>
+    </fieldset>
+    <fieldset class="chips-field">
+      <legend>Languages you speak</legend>
+      <label><input type="checkbox" name="languages" value="hi" checked> Hindi</label>
+      <label><input type="checkbox" name="languages" value="mr"> Marathi</label>
+      <label><input type="checkbox" name="languages" value="en"> English</label>
+      <label><input type="checkbox" name="languages" value="ur"> Urdu</label>
+      <label><input type="checkbox" name="languages" value="bho"> Bhojpuri</label>
+      <label><input type="checkbox" name="languages" value="ta"> Tamil</label>
+      <label><input type="checkbox" name="languages" value="pa"> Punjabi</label>
+      <label><input type="checkbox" name="languages" value="bn"> Bengali</label>
+    </fieldset>
+
+    <label for="reg-password">Password <span class="opt">(at least 8 characters)</span></label>
+    <div class="pw-field">
+      <input id="reg-password" type="password" autocomplete="new-password" minlength="8" required>
+      <button type="button" class="pw-reveal" data-reveal="reg-password" aria-label="Show"></button>
+    </div>
+    <label for="reg-password2">Password again</label>
+    <input id="reg-password2" type="password" autocomplete="new-password" minlength="8" required>
+    <button class="btn btn-go auth-submit" id="register-go" data-busy="Sending…">Send for approval</button>
+  </form>
+</main>
+
+<p class="auth-foot">Pilgrim? <a href="/app/">Open the pilgrim app</a> · Control room? <a href="/admin/login.html">Admin sign in</a></p>
+
+<script type="module" src="/shared/login.js"></script>
+</body>
+</html>
